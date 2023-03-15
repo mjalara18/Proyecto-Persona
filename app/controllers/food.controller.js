@@ -35,9 +35,21 @@ exports.findAll = (req, res) => {
     const foodName = req.query.foodName;
     var condition = foodName ? { foodName: { $regex: new RegExp(foodName), $options: "i" } } : {};
   
-    Food.populate(data, { path: "person" }, function (err, data) {
-      res.send(data);
+    Food.find(condition)
+    .then(data => {
+      Food.populate(data, { path: "person" }, function (err, data) {
+        res.send(data);
+      })
     })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Foods."
+      });
+    });
+
+
+    
 };
 
 exports.findOne = (req, res) => {

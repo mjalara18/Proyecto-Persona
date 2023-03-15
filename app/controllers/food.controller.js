@@ -37,7 +37,7 @@ exports.findAll = (req, res) => {
   
     Food.find(condition)
     .then(data => {
-      Food.populate(data, { path: "person" }, function (err, data) {
+       Food.populate(data, { path: "person" }, function (err, data) {
         res.send(data);
       })
     })
@@ -47,9 +47,6 @@ exports.findAll = (req, res) => {
           err.message || "Some error occurred while retrieving Foods."
       });
     });
-
-
-    
 };
 
 exports.findOne = (req, res) => {

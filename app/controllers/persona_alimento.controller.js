@@ -2,15 +2,19 @@ const { personFood } = require("../models");
 const db = require("../models");
 const PersonFood = db.personFood;
 var amount = 0
-var state = 
+//var state = la estás declarando fuera del contexto de la función 
 
 exports.create = (req, res) => {
-  if (!req.body.name) {
+  if(!req.body.person || !req.body.food) { // debes validar las variables que estás enviando
+  //if (!req.body.name) { // esta variable no existe
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
 
-  if (req.body.amount > 5){
+  //debes declarar lo que necesites dentro de la función para poder utilizarlo luego
+  var state = '';
+
+  if (req.body.amount > 5){ // ok
     state = 'activo'
   } else {
     state = 'inactivo'
@@ -20,7 +24,8 @@ exports.create = (req, res) => {
     person: req.body.person,
     food: req.body.food,
     amount : req.body.amount,
-    state: req.body.state
+    state: state // por eso usamos la variable state.
+    //state: req.body.state // aquí no se debe asignar el valor que viene del body request (postman) sino lo que validaste
 });
 
 personFood

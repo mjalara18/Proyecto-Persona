@@ -27,6 +27,7 @@ app.get("/foods", function (req, res) {
 
 require("./app/routes/person.routes")(app);
 require("./app/routes/alimento.routes")(app);
+require("./app/routes/persona_alimento.routes")(app);
 
 const PORT = process.env.PORT || 1234;
 app.listen(PORT, () => {

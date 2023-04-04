@@ -1,4 +1,4 @@
-module.exports = app => {
+module.exports = app => { 
     const foods = require("../controllers/food.controller.js");
     var router = require("express").Router();
   
@@ -7,6 +7,8 @@ module.exports = app => {
     router.get("/", foods.findAll);
 
     router.get("/:id", foods.findOne);
+
+    router.put("/:id", foods.update);
 
     router.delete("/:id", foods.delete);
 

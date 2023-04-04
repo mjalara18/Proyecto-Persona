@@ -16,6 +16,7 @@ exports.create = (req, res) => {
 
     });
   
+    
     person
       .save(person)
       .then(data => {
@@ -32,7 +33,7 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
     const name = req.query.name;
     var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
-  
+
     Person.find(condition)
       .then(data => {
         res.send(data);
@@ -43,6 +44,7 @@ exports.findAll = (req, res) => {
             err.message || "Some error occurred while retrieving Persons."
         });
       });
+   
 };
 
 exports.findOne = (req, res) => {
@@ -58,6 +60,30 @@ exports.findOne = (req, res) => {
         res
           .status(500)
           .send({ message: "Error retrieving Person with id=" + id });
+      });
+  };
+
+  exports.update = (req, res) => {
+    if (!req.body) {
+      return res.status(400).send({
+        message: "Data to update can not be empty!"
+      });
+    }
+  
+    const id = req.params.id;
+  
+    Person.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+      .then(data => {
+        if (!data) {
+          res.status(404).send({
+            message: `Cannot update Person with id=${id}. Maybe Person was not found!`
+          });
+        } else res.send({ message: "Person was updated successfully." });
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error updating Person with id=" + id
+        });
       });
   };
 

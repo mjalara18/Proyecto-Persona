@@ -17,17 +17,10 @@ app.get("/", (req, res) => {
   res.json({ message: "Bienvenido a la app personas" });
 });
 
-app.get("/foods", function (req, res) {
-  Food.find({}, function (err, foods) {
-    Person.populate(foods, { path: "persons" }, function (err, foods) {
-      res.status(200).send(foods);
-    });
-  });
-});
-
 require("./app/routes/person.routes")(app);
 require("./app/routes/alimento.routes")(app);
 require("./app/routes/persona_alimento.routes")(app);
+require("./app/routes/banco.routes")(app);
 
 const PORT = process.env.PORT || 1234;
 app.listen(PORT, () => {
@@ -35,6 +28,7 @@ app.listen(PORT, () => {
 });
 
 const db = require("./app/models");
+const { banco } = require("./app/models");
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true,

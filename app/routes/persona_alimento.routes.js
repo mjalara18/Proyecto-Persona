@@ -8,6 +8,8 @@ module.exports = app => {
 
     router.get("/:id", personsFoods.findOne);
 
+    router.put("/:id", personsFoods.update);
+
     router.delete("/:id", personsFoods.delete);
 
     router.delete("/", personsFoods.deleteAll);

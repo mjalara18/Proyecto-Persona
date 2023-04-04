@@ -37,9 +37,7 @@ exports.findAll = (req, res) => {
   
     Food.find(condition)
     .then(data => {
-       Food.populate(data, { path: "person" }, function (err, data) {
         res.send(data);
-      })
     })
     .catch(err => {
       res.status(500).send({
@@ -50,22 +48,42 @@ exports.findAll = (req, res) => {
 };
 
 exports.findOne = (req, res) => {
+  const id = req.params.id;
+
+  Food.findById(id)
+    .then(data => {
+      if (!data)
+        res.status(404).send({ message: "Not found Food with id " + id });
+      else res.send(data);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .send({ message: "Error retrieving Food with id=" + id });
+    });
+};
+
+  exports.update = (req, res) => {
+    if (!req.body) {
+      return res.status(400).send({
+        message: "Data to update can not be empty!"
+      });
+    }
+  
     const id = req.params.id;
   
-    Food.findById(id)
+    Food.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
       .then(data => {
-        if (!data)
-          res.status(404).send({ message: "Not found Food with id " + id });
-        else{
-          Food.populate(data, { path: "person" }, function (err, data) {
-            res.send(data);
-          })
-        }
+        if (!data) {
+          res.status(404).send({
+            message: `Cannot update Food with id=${id}. Maybe Food was not found!`
+          });
+        } else res.send({ message: "Food was updated successfully." });
       })
       .catch(err => {
-        res
-          .status(500)
-          .send({ message: "Error retrieving Food with id=" + id });
+        res.status(500).send({
+          message: "Error updating Food with id=" + id
+        });
       });
   };
 
